@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { db } from "./firebase"
+import { onValue, ref } from "firebase/database"
+import { useEffect, useState } from 'react'
 
 function App() {
+
+  const [messages, setMessages] = useState([])
+
+  useEffect(() => {
+    const query = ref(db, "messages");
+    return onValue(query, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data)
+
+      if (snapshot.exists()) {
+        Object.values(data).map((message) => {
+          setMessages((messages) => [...messages, message]);
+        });
+      }
+    });
+  }, []);
+
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ul>
+      {messages.map((message, index) => (
+        <li {...message} key={index}>{message.name}</li>
+      ))}
+      </ul>
     </div>
   );
 }
