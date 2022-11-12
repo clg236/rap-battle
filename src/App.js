@@ -4,31 +4,26 @@ import { useEffect, useState } from 'react'
 
 function App() {
 
-  const [messages, setMessages] = useState([])
+  const [images, setImages] = useState([])
 
   useEffect(() => {
-    const query = ref(db, "messages");
+    const query = ref(db, "images");
     return onValue(query, (snapshot) => {
       const data = snapshot.val();
       console.log(data)
 
       if (snapshot.exists()) {
-        Object.values(data).map((message) => {
-          setMessages((messages) => [...messages, message]);
+        Object.values(data).map((image) => {
+          setImages((images) => [...images, image]);
         });
       }
     });
   }, []);
 
-  
-
   return (
     <div>
-      <ul>
-      {messages.map((message, index) => (
-        <li {...message} key={index}>{message.name}</li>
-      ))}
-      </ul>
+      <p>test</p>
+      <img src="https://files.slack.com/files-pri/T043PMV3RUY-F04AER2M9U6/download/btc.gif" />
     </div>
   );
 }
